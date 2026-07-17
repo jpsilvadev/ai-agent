@@ -28,15 +28,20 @@ def generate_content(client: OpenAI, messages: list) -> None:
             "Response has missing usage field. Indicates failed API request."
         )
 
-    print(f"Prompt tokens: {response.usage.prompt_tokens}")
-    print(f"Response tokens: {response.usage.completion_tokens}")
+    if args.verbose:
+        print(f"User prompt: {args.user_prompt}")
+        print(f"Prompt tokens: {response.usage.prompt_tokens}")
+        print(f"Response tokens: {response.usage.completion_tokens}")
 
     print(f"Response:\n{response.choices[0].message.content}")
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Chatbot")
+
     parser.add_argument("user_prompt", type=str, help="User prompt")
+    parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
+
     return parser.parse_args()
 
 
