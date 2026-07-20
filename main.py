@@ -1,9 +1,11 @@
 import argparse
 import json
 import os
+from typing import cast
 
 from dotenv import load_dotenv
 from openai import OpenAI
+from openai.types.chat import ChatCompletionToolUnionParam
 
 from call_function import available_functions
 from prompts import system_prompt
@@ -27,7 +29,9 @@ def main() -> None:
 
 def generate_content(client: OpenAI, messages: list) -> None:
     response = client.chat.completions.create(
-        model="openrouter/free", messages=messages, tools=available_functions
+        model="openrouter/free",
+        messages=messages,
+        tools=cast(list[ChatCompletionToolUnionParam], available_functions),
     )
 
     if response.usage is None:
